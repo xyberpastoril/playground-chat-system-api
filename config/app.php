@@ -185,6 +185,7 @@ return [
         /*
          * Package Service Providers...
          */
+        \ESolution\DBEncryption\Providers\DBEncryptionServiceProvider::class,
 
         /*
          * Application Service Providers...

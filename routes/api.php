@@ -14,19 +14,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::group([
+    'namespace' => 'Api\Auth',
+    'as' => 'auth.',
+    'prefix' => '/auth',
+], function(){
+    Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'login']);
+    Route::post('/logout', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'logout'])
+        ->middleware('auth:api');
+    Route::post('/forgot', [\App\Http\Controllers\Api\Auth\ForgotPasswordController::class, 'forgot']);
+    Route::post('/reset', [\App\Http\Controllers\Api\Auth\ForgotPasswordController::class, 'reset']);
+
+    Route::group([
+        'as' => 'register.',
+        'prefix' => '/register',
+    ], function(){
+        Route::post('/generate-otp', [\App\Http\Controllers\Api\Auth\RegisterController::class, 'generateOTP']);
+        Route::post('/verify', [\App\Http\Controllers\Api\Auth\RegisterController::class, 'verifyAndRegister']);
+    });
+});
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
 Route::get('users', function(){
     return App\Models\User::all();
-});
-
-Route::group(['namespace' => 'Api\Auth'], function(){
-    Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'login']);
-    Route::post('/logout', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'logout'])
-        ->middleware('auth:api');
-    Route::post('/register', [\App\Http\Controllers\Api\Auth\RegisterController::class, 'register']);
-    Route::post('/forgot-password', [\App\Http\Controllers\Api\Auth\ForgotPasswordController::class, 'forgot']);
-    Route::post('/reset-password', [\App\Http\Controllers\Api\Auth\ForgotPasswordController::class, 'reset']);
 });
