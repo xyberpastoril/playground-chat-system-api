@@ -26,7 +26,9 @@ class AuthenticationController extends Controller
         $user->tokens->each(function($token) {
             $token->delete(); // Revoke past token of the user prior to creating a new one.
         });
-        $token = $user->createToken($user->name);
+    
+        $tokenName = 'AccessToken-' . Auth::user()->id . '-' . time();
+        $token = $user->createToken($tokenName);
 
         return response()->json([
             'token' => [
@@ -34,7 +36,8 @@ class AuthenticationController extends Controller
                 'expires_at' => $token->token->expires_at,
             ],
             'user' => [
-                'name' => $user->name,
+                'first_name' => $user->customer->first_name,
+                'last_name' => $user->customer->last_name,
                 'email' => $user->email,
                 'created_at' => $user->created_at,
             ]
@@ -46,7 +49,7 @@ class AuthenticationController extends Controller
         /**
          * @var User $user
          */
-        $user = Auth::user();
+        $user = Auth::guard('api')->user();
         $user->tokens->each(function($token) {
             $token->delete();
         });
