@@ -13,16 +13,16 @@ class SendOTPMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    private $firstName, $email, $otp;
+    private $name, $email, $otp;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($firstName, $email, $otp)
+    public function __construct($name, $email, $otp)
     {
-        $this->firstName = $firstName;
+        $this->name = $name;
         $this->email = $email;
         $this->otp = $otp;
     }
@@ -50,7 +50,7 @@ class SendOTPMail extends Mailable implements ShouldQueue
         return new Content(
             markdown: 'mail.auth.register.otp',
             with: [
-                'firstName' => $this->firstName,
+                'name' => $this->name,
                 'email' => $this->email,
                 'otp' => $this->otp,
             ]

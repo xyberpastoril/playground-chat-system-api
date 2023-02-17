@@ -26,19 +26,9 @@ class VerifyAndRegisterRequest extends FormRequest
         return [
             'otp' => ['required', 'min:6', 'max:6'],
             
+            'name' => ['required', 'max:255'],
             'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'min:6', 'confirmed'],
-            
-            'first_name' => ['required'],
-            'last_name' => ['required'],
-            'contact_number' => ['required'],
-
-            'barangay_id' => ['required', 'numeric'],
-            'house_lot_number' => ['sometimes'],
-            'street' => ['sometimes'],
-            'village_subdivision' => ['sometimes'],
-            'unit_floor' => ['sometimes'],
-            'building' => ['sometimes'],
+            'password' => ['required', 'min:6', 'confirmed'],  
         ];
     }
 }

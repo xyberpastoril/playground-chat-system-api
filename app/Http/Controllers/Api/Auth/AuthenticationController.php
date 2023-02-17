@@ -36,8 +36,7 @@ class AuthenticationController extends Controller
                 'expires_at' => $token->token->expires_at,
             ],
             'user' => [
-                'first_name' => $user->customer->first_name,
-                'last_name' => $user->customer->last_name,
+                'name' => $user->name,
                 'email' => $user->email,
                 'created_at' => $user->created_at,
             ]
