@@ -41,7 +41,7 @@ class RegisterController extends Controller
         ]);
 
         // Send OTP to the user's email address
-        Mail::to($validated['email'])->send(new SendOTPMail($validated['first_name'], $validated['email'], $value));
+        Mail::to($validated['email'])->send(new SendOTPMail($validated['name'], $validated['email'], $value));
 
         return response()->json([
             'message' => "OTP sent to {$validated['email']}."
@@ -78,25 +78,9 @@ class RegisterController extends Controller
 
         // Register User
         $user = User::create([
+            'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
-        ]);
-
-        // Create Customer
-        $customer = $user->customer()->create([
-            'first_name' => $validated['first_name'],
-            'last_name' => $validated['last_name'],
-            'contact_number' => $validated['contact_number'],
-        ]);
-
-        // Create Customer Address
-        $customer->addresses()->create([
-            'barangay_id' => $validated['barangay_id'],
-            'house_lot_number' => $validated['house_lot_number'],
-            'street' => $validated['street'],
-            'village_subdivision' => $validated['village_subdivision'],
-            'unit_floor' => $validated['unit_floor'],
-            'building' => $validated['building'],
         ]);
 
         // Login User after registration
@@ -109,8 +93,7 @@ class RegisterController extends Controller
                 'expires_at' => $token->token->expires_at,
             ],
             'user' => [
-                'first_name' => $user->customer->first_name,
-                'last_name' => $user->customer->last_name,
+                'name' => $user->name,
                 'email' => $user->email,
                 'created_at' => $user->created_at,
             ],

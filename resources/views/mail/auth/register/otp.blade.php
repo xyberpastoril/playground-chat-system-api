@@ -1,5 +1,5 @@
 <x-mail::message>
-# Greetings, {{ $firstName }}
+# Greetings, {{ $name }}
 
 Your registration one-time password (OTP) is **{{ $otp }}**.
 
