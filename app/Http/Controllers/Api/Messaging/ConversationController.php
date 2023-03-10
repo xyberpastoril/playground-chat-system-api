@@ -87,4 +87,23 @@ class ConversationController extends Controller
         ], 200);
     }
 
+    /**
+     * An API endpoint to reply to a conversation.
+     */
+    public function reply(ReplyMessageRequest $request, Conversation $conversation)
+    {
+        $validated = $request->validated();
+
+        // Store the message
+        $conversation->messages()->create([
+            'body' => $validated['body'],
+            'sender_user_id' => Auth::id(),
+        ]);
+
+        // Return response
+        return response()->json([
+            'message' => 'Message sent successfully.',
+            'conversation' => $conversation,
+        ], 201);
+    }
 }

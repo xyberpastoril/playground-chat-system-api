@@ -54,5 +54,7 @@ Route::group([
     // Messaging
     Route::post('/messaging/conversation/create', [\App\Http\Controllers\Api\Messaging\ConversationController::class, 'create']);
     Route::get('/messaging/conversation/get/{conversation}', [\App\Http\Controllers\Api\Messaging\ConversationController::class, 'get']);
+    Route::post('/messaging/conversation/reply/{conversation}', [\App\Http\Controllers\Api\Messaging\ConversationController::class, 'reply']);
 
 });
+
