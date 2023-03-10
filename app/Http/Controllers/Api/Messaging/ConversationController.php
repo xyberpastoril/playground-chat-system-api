@@ -64,4 +64,27 @@ class ConversationController extends Controller
         ], 201);
     }
 
+    /**
+     * Get the conversation, participants and the messages.
+     */
+    public function get(Conversation $conversation)
+    {
+        // Check if the authenticated user is a participant of the conversation
+        if(!$conversation->participants->contains('user_id', Auth::id()))
+        {
+            return response()->json([
+                'message' => 'You are not a participant of this conversation.',
+            ], 403);
+        }
+
+        $conversation->messages;
+        $conversation->participants;
+
+        // Return response
+        return response()->json([
+            'message' => 'Conversation retrieved successfully.',
+            'conversation' => $conversation,
+        ], 200);
+    }
+
 }
