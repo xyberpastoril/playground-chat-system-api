@@ -13,6 +13,35 @@ use Illuminate\Support\Facades\Auth;
 class ConversationController extends Controller
 {
     /**
+     * An API endpoint showing the conversations of the authenticated user.
+     */
+    public function index()
+    {
+        // Get the conversations of the authenticated user
+        $conversations = Conversation::whereHas('participants', function ($query) {
+            $query->where('user_id', Auth::id());
+        })
+        // with participants aside from authenticated user
+        ->with(['participants' => function($query){
+            $query->where('user_id', '!=', Auth::id());
+            // with the user details
+            $query->with('user');
+        }])
+        // with the latest message
+        ->with(['messages' => function($query){
+            // get the latest message, limit 1
+            $query->latest()->limit(1);
+        }])
+        ->get();
+
+        // Return response
+        return response()->json([
+            'message' => 'Conversations retrieved successfully.',
+            'conversations' => $conversations,
+        ], 200);
+    }
+
+    /**
      * An API endpoint to create a new conversation.
      */
     public function create(CreateConversationRequest $request)
