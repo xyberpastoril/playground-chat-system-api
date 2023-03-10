@@ -18,7 +18,7 @@ Route::group([
     'namespace' => 'Api\Auth',
     'as' => 'auth.',
     'prefix' => '/auth',
-], function(){
+], function(){  
     Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'login']);
     Route::post('/logout', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'logout'])
         ->middleware('auth:api');
@@ -40,4 +40,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('users', function(){
     return App\Models\User::all();
+});
+
+Route::get('search/user/{name}', function($name){
+    return App\Models\User::where('name', 'like', '%'.$name.'%')->get();
 });
