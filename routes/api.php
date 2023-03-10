@@ -18,7 +18,7 @@ Route::group([
     'namespace' => 'Api\Auth',
     'as' => 'auth.',
     'prefix' => '/auth',
-], function(){  
+], function(){
     Route::post('/login', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'login']);
     Route::post('/logout', [\App\Http\Controllers\Api\Auth\AuthenticationController::class, 'logout'])
         ->middleware('auth:api');
@@ -42,6 +42,16 @@ Route::get('users', function(){
     return App\Models\User::all();
 });
 
-Route::get('search/user/{name}', function($name){
-    return App\Models\User::where('name', 'like', '%'.$name.'%')->get();
+Route::group([
+    'middleware' => 'auth:api',
+], function(){
+
+    // Search User
+    Route::get('search/user/{name}', function($name){
+        return App\Models\User::where('name', 'like', '%'.$name.'%')->get();
+    });
+
+    // Messaging
+    Route::post('/messaging/conversation/create', [\App\Http\Controllers\Api\Messaging\ConversationController::class, 'create']);
+
 });
